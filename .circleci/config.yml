@@ -8,7 +8,8 @@ jobs:
     docker:
       # specify the version you desire here
       - image: circleci/php:7.1-node-browsers
-      
+      - image: circleci/mysql:5.7
+
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
       # documented at https://circleci.com/docs/2.0/circleci-images/
@@ -19,6 +20,22 @@ jobs:
     steps:
       - checkout
 
+      - run:
+          name: Install MySQL client
+          command: sudo apt-get install mysql-client
+
+      - run:
+          name: Install MySQL PHP extension
+          command: sudo docker-php-ext-install mysqli
+
+      - run:
+          name: Setup linter and standards
+          command: >
+              mkdir php-codesniffer && curl -L https://github.com/squizlabs/PHP_CodeSniffer/archive/master.tar.gz | tar xz --strip-components=1 -C php-codesniffer
+              mkdir wordpress-coding-standards && curl -L https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/archive/master.tar.gz | tar xz --strip-components=1 -C wordpress-coding-standards
+              cd php-codesniffer
+              ./php-codesniffer/scripts/phpcs --config-set installed_paths ../wordpress-coding-standards
+              
       # Download and cache dependencies
       - restore_cache:
           keys:
@@ -32,6 +49,6 @@ jobs:
           paths:
             - ./vendor
           key: v1-dependencies-{{ checksum "composer.json" }}
-        
+
       # run tests!
       - run: ./vendor/bin/phpunit .tests/StackTest.php
