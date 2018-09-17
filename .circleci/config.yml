@@ -31,10 +31,10 @@ jobs:
       - run:
           name: Setup linter and standards
           command: >
-          mkdir php-codesniffer && curl -L https://github.com/squizlabs/PHP_CodeSniffer/archive/master.tar.gz
-          | tar xz --strip-components=1 -C php-codesniffer
-          | mkdir wordpress-coding-standards && curl -L https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/archive/master.tar.gz
-          | tar xz --strip-components=1 -C wordpress-coding-standards
+          mkdir php-codesniffer && curl -L https://github.com/squizlabs/PHP_CodeSniffer/archive/master.tar.gz |
+          tar xz --strip-components=1 -C php-codesniffer |
+          mkdir wordpress-coding-standards && curl -L https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/archive/master.tar.gz |
+          tar xz --strip-components=1 -C wordpress-coding-standards |
           ./php-codesniffer/scripts/phpcs --config-set installed_paths ../wordpress-coding-standards
 
       # Download and cache dependencies
